@@ -19,7 +19,7 @@
   <meta name="twitter:description" content="2つのWebページを視覚比較できる、ビルド不要の静的HTMLツール。">
   <title>Kasanely - Webサイト比較・重ね合わせチェックツール</title>
   <link rel="icon" href="data:,">
-  <link rel="stylesheet" href="./static/styles.css">
+  <link rel="stylesheet" href="./static/styles.css?v=20260527-lang-1">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -46,36 +46,48 @@
     }
   }
   </script>
-  <script src="./static/app.js" defer></script>
+  <script src="./static/app.js?v=20260527-lang-1" defer></script>
 </head>
 <body>
-  <a class="skip-link" href="#comparison">比較エリアへ移動</a>
-  <div class="mobile-warning" role="alert">
+  <a class="skip-link" href="#comparison" data-i18n="skipLink">比較エリアへ移動</a>
+  <div class="mobile-warning" role="alert" data-i18n="mobileWarning">
     KasanelyはPCでの利用を想定しています。スマートフォンでは表示や操作が崩れる可能性があります。
   </div>
 
   <header class="hero">
-    <nav class="top-links" aria-label="ページ内リンク">
-      <a href="#settings">設定</a>
-      <a href="#notes">制限事項</a>
+    <nav class="top-links" aria-label="ページ内リンク" data-i18n-aria="navLinks">
+      <div class="language-switch" role="group" aria-label="言語切り替え" data-i18n-aria="languageSwitch">
+        <button class="lang-button" type="button" data-lang-choice="ja" aria-pressed="true" data-i18n="langJa">日本語</button>
+        <button class="lang-button" type="button" data-lang-choice="en" aria-pressed="false" data-i18n="langEn">EN</button>
+      </div>
+      <a href="#settings" data-i18n="settingsLink">設定</a>
+      <a href="#notes" data-i18n="notesLink">制限事項</a>
     </nav>
     <h1>Kasanely</h1>
-    <p class="intro">2つのWebサイトを横並び、重ね合わせ、スワイプ、差分表示で比較できます。静的ファイルだけで動作し、Basic認証付きURLにも対応します。</p>
+    <p class="intro" data-i18n="intro">2つのWebサイトを横並び、重ね合わせ、スワイプ、差分表示で比較できます。静的ファイルだけで動作し、Basic認証付きURLにも対応します。</p>
   </header>
 
-  <section class="url-inputs" aria-label="比較するURL">
+  <section class="url-inputs" aria-label="比較するURL" data-i18n-aria="urlSection">
     <div class="url-panel">
-      <label for="left-url">比較元URL</label>
+      <label for="left-url" data-i18n="leftUrl">比較元URL</label>
       <input id="left-url" type="url" placeholder="https://example.com" autocomplete="url">
+      <div class="local-file-row">
+        <label class="file-picker" for="left-file">
+          <span data-i18n="localHtml">ローカルHTML</span>
+          <input id="left-file" type="file" accept=".html,.htm,text/html">
+        </label>
+        <button id="left-clear-file" class="secondary-button" type="button" hidden data-i18n="clearFile">解除</button>
+      </div>
+      <output id="left-file-name" class="file-name">ローカルHTML未選択</output>
       <label class="check-row">
         <input id="left-auth-enabled" type="checkbox">
-        Basic認証を使う
+        <span data-i18n="basicAuth">Basic認証を使う</span>
       </label>
       <div class="auth-grid">
-        <label for="left-user">ユーザー名
+        <label for="left-user"><span data-i18n="username">ユーザー名</span>
           <input id="left-user" type="text" autocomplete="username">
         </label>
-        <label for="left-pass">パスワード
+        <label for="left-pass"><span data-i18n="password">パスワード</span>
           <input id="left-pass" type="password" autocomplete="current-password">
         </label>
       </div>
@@ -84,26 +96,34 @@
     <div class="versus" aria-hidden="true">vs.</div>
 
     <div class="url-panel">
-      <label for="right-url">比較先URL</label>
+      <label for="right-url" data-i18n="rightUrl">比較先URL</label>
       <input id="right-url" type="url" placeholder="https://example.com" autocomplete="url">
+      <div class="local-file-row">
+        <label class="file-picker" for="right-file">
+          <span data-i18n="localHtml">ローカルHTML</span>
+          <input id="right-file" type="file" accept=".html,.htm,text/html">
+        </label>
+        <button id="right-clear-file" class="secondary-button" type="button" hidden data-i18n="clearFile">解除</button>
+      </div>
+      <output id="right-file-name" class="file-name">ローカルHTML未選択</output>
       <label class="check-row">
         <input id="right-auth-enabled" type="checkbox">
-        Basic認証を使う
+        <span data-i18n="basicAuth">Basic認証を使う</span>
       </label>
       <div class="auth-grid">
-        <label for="right-user">ユーザー名
+        <label for="right-user"><span data-i18n="username">ユーザー名</span>
           <input id="right-user" type="text" autocomplete="username">
         </label>
-        <label for="right-pass">パスワード
+        <label for="right-pass"><span data-i18n="password">パスワード</span>
           <input id="right-pass" type="password" autocomplete="current-password">
         </label>
       </div>
     </div>
   </section>
 
-  <section id="settings" class="settings-panel" aria-label="表示設定">
+  <section id="settings" class="settings-panel" aria-label="表示設定" data-i18n-aria="settingsPanel">
     <div class="config-grid">
-      <label for="viewport">表示サイズ
+      <label for="viewport"><span data-i18n="viewportLabel">表示サイズ</span>
         <select id="viewport">
           <option value="375x667">iPhone 6/7/8 - 375 x 667</option>
           <option value="390x844">iPhone 12/13 - 390 x 844</option>
@@ -115,89 +135,87 @@
         </select>
       </label>
 
-      <label for="page-height">ページ全体の高さ
+      <label for="page-height"><span data-i18n="pageHeightLabel">ページ全体の高さ</span>
         <input id="page-height" type="number" min="800" max="20000" step="100" value="3200">
       </label>
 
       <fieldset>
-        <legend>比較モード</legend>
+        <legend data-i18n="displayMode">比較モード</legend>
         <div class="toggle">
           <input type="radio" name="display-mode" value="side" id="mode-side" checked>
-          <label for="mode-side">横並び</label>
+          <label for="mode-side" data-i18n="sideBySide">横並び</label>
           <input type="radio" name="display-mode" value="overlay" id="mode-overlay">
-          <label for="mode-overlay">重ね合わせ</label>
+          <label for="mode-overlay" data-i18n="overlay">重ね合わせ</label>
         </div>
       </fieldset>
 
       <fieldset id="overlay-group">
-        <legend>重ね合わせ</legend>
-        <div class="toggle three">
+        <legend data-i18n="overlayLegend">重ね合わせ</legend>
+        <div class="toggle">
           <input type="radio" name="overlay-mode" value="swipe" id="overlay-swipe">
           <label for="overlay-swipe">swipe</label>
-          <input type="radio" name="overlay-mode" value="difference" id="overlay-difference">
-          <label for="overlay-difference">差分</label>
-          <input type="radio" name="overlay-mode" value="onion" id="overlay-onion" checked>
-          <label for="overlay-onion">onion</label>
+          <input type="radio" name="overlay-mode" value="difference" id="overlay-difference" checked>
+          <label for="overlay-difference" data-i18n="difference">差分</label>
         </div>
       </fieldset>
 
-      <label for="amount">透明度 / swipe位置
+      <label for="amount"><span data-i18n="amountLabel">透明度 / swipe位置</span>
         <input id="amount" type="range" min="0" max="100" value="50">
       </label>
 
-      <label for="right-shift-x">比較先の横位置
+      <label for="right-shift-x"><span data-i18n="rightShiftX">比較先の横位置</span>
         <input id="right-shift-x" type="number" min="-5000" max="5000" step="1" value="0">
       </label>
 
-      <button id="load" type="button">読み込み</button>
+      <button id="load" type="button" data-i18n="load">読み込み</button>
     </div>
-    <div id="sticky-x-scroll" class="sticky-x-scroll" aria-label="比較エリアの横スクロール" role="group">
+    <div id="sticky-x-scroll" class="sticky-x-scroll" aria-label="比較エリアの横スクロール" role="group" data-i18n-aria="xScroll">
       <div id="sticky-x-scroll-inner"></div>
     </div>
   </section>
 
   <main id="comparison" class="comparison-layout" data-mode="side">
-    <aside class="shift-panel shift-panel-left" aria-label="比較元の縦位置調整">
-      <button class="shift-button" type="button" data-shift="left" data-step="-1" aria-label="比較元を上へ1px移動">↑</button>
+    <aside class="shift-panel shift-panel-left" aria-label="比較元の縦位置調整" data-i18n-aria="leftShiftPanel">
+      <button class="shift-button" type="button" data-shift="left" data-step="-1" aria-label="比較元を上へ1px移動" data-i18n-aria="leftShiftUp">↑</button>
       <div class="shift-input">
         <input id="left-shift-y" type="number" min="-20000" max="20000" step="1" value="0">
-        <label for="left-shift-y">左 px</label>
+        <label for="left-shift-y" data-i18n="leftPx">左 px</label>
       </div>
-      <button class="shift-button" type="button" data-shift="left" data-step="1" aria-label="比較元を下へ1px移動">↓</button>
+      <button class="shift-button" type="button" data-shift="left" data-step="1" aria-label="比較元を下へ1px移動" data-i18n-aria="leftShiftDown">↓</button>
     </aside>
 
-    <section id="stage" class="stage" data-mode="side" data-overlay="onion" aria-label="比較プレビュー">
+    <section id="stage" class="stage" data-mode="side" data-overlay="difference" aria-label="比較プレビュー" data-i18n-aria="preview">
       <div class="status-row">
         <output id="left-status">未読み込み</output>
         <output id="right-status">未読み込み</output>
       </div>
       <div class="frame-card left-card">
-        <iframe id="left-frame" title="比較元サイト" scrolling="no"></iframe>
+        <iframe id="left-frame" title="比較元サイト" scrolling="no" data-i18n-title="leftFrameTitle"></iframe>
         <hr class="device-height-line">
       </div>
       <div class="frame-card right-card">
-        <iframe id="right-frame" title="比較先サイト" scrolling="no"></iframe>
+        <iframe id="right-frame" title="比較先サイト" scrolling="no" data-i18n-title="rightFrameTitle"></iframe>
         <hr class="device-height-line">
       </div>
-      <div id="swipe-handle" class="swipe-handle" role="slider" aria-label="swipe位置" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" tabindex="0"></div>
+      <div id="swipe-handle" class="swipe-handle" role="slider" aria-label="swipe位置" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" tabindex="0" data-i18n-aria="swipePosition"></div>
     </section>
 
-    <aside class="shift-panel shift-panel-right" aria-label="比較先の縦位置調整">
-      <button class="shift-button" type="button" data-shift="right" data-step="-1" aria-label="比較先を上へ1px移動">↑</button>
+    <aside class="shift-panel shift-panel-right" aria-label="比較先の縦位置調整" data-i18n-aria="rightShiftPanel">
+      <button class="shift-button" type="button" data-shift="right" data-step="-1" aria-label="比較先を上へ1px移動" data-i18n-aria="rightShiftUp">↑</button>
       <div class="shift-input">
         <input id="right-shift-y" type="number" min="-20000" max="20000" step="1" value="0">
-        <label for="right-shift-y">右 px</label>
+        <label for="right-shift-y" data-i18n="rightPx">右 px</label>
       </div>
-      <button class="shift-button" type="button" data-shift="right" data-step="1" aria-label="比較先を下へ1px移動">↓</button>
+      <button class="shift-button" type="button" data-shift="right" data-step="1" aria-label="比較先を下へ1px移動" data-i18n-aria="rightShiftDown">↓</button>
     </aside>
   </main>
 
   <section id="notes" class="notes">
-    <h2>制限事項</h2>
-    <p>Kasanelyは静的HTMLツールのため、iframeに任意のAuthorizationヘッダーは付けられません。Basic認証は <code>https://user:pass@example.com/</code> 形式のURLを生成して読み込みます。認証情報がURLに含まれるため、公開画面や録画での利用には注意してください。</p>
-    <p>X-Frame-OptionsやContent-Security-Policyによってiframe表示が禁止されているサイトは、ブラウザ側だけでは表示できません。その場合はサーバー側プロキシが必要です。</p>
+    <h2 data-i18n="notesTitle">制限事項</h2>
+    <p><span data-i18n="basicAuthNotePrefix">Kasanelyは静的HTMLツールのため、iframeに任意のAuthorizationヘッダーは付けられません。Basic認証は</span> <code>https://user:pass@example.com/</code> <span data-i18n="basicAuthNoteSuffix">形式のURLを生成して読み込みます。認証情報がURLに含まれるため、公開画面や録画での利用には注意してください。</span></p>
+    <p data-i18n="iframeNote">X-Frame-OptionsやContent-Security-Policyによってiframe表示が禁止されているサイトは、ブラウザ側だけでは表示できません。その場合はサーバー側プロキシが必要です。</p>
   </section>
 
-  <footer class="footer">認証情報は保存しません。ただし読み込み先URLには認証情報が含まれるため、信頼できる環境で利用してください。</footer>
+  <footer class="footer" data-i18n="footer">認証情報は保存しません。ただし読み込み先URLには認証情報が含まれるため、信頼できる環境で利用してください。</footer>
 </body>
 </html>

@@ -1,45 +1,91 @@
 # Kasanely
 
-Kasanelyは、2つのWebサイトを視覚比較するビルド不要の静的HTMLツールです。`index.html` をブラウザで開くだけで使えます。
+Kasanely is a static HTML tool for visually comparing two web pages or local HTML files.
 
-## 使い方
+It runs in the browser without a build step. Open `index.html`, enter URLs or choose local HTML files, then compare them side by side, as an overlay, with a swipe handle, or with difference blending.
 
-1. `index.html` を開きます。
-2. 比較元URLと比較先URLを入力します。
-3. 必要に応じてBasic認証を有効にし、ユーザー名とパスワードを入力します。
-4. 表示サイズ、ページ全体の高さ、比較モードを選びます。
-5. `読み込み` を押して比較します。
+## Features
 
-## 比較機能
+- Compare two URLs side by side
+- Load local `.html` / `.htm` files from your machine
+- Japanese / English UI switch
+- Overlay comparison with swipe mode
+- Difference view with adjustable opacity
+- Preset viewport sizes for mobile, tablet, and desktop
+- Adjustable full-page height
+- Vertical position adjustment for both sides
+- Horizontal position adjustment for the right side
+- Sticky settings and position adjustment panels
+- Basic-auth URL generation for simple protected pages
+- No install, no build, no backend
 
-- 横並び表示
-- 重ね合わせ表示
-- onion表示
-- swipe表示
-- 差分表示
-- フルページ表示
-- 左右ページの縦位置調整
-- 比較先ページの横位置調整
-- PC向けプリセット
+## Usage
 
-## Basic認証について
+1. Open `index.html` in your browser.
+2. For each side, either enter a URL or choose a local HTML file.
+3. Select the viewport size and page height.
+4. Choose side-by-side or overlay mode.
+5. In overlay mode, use swipe or difference display.
+6. Use the position controls to align the two pages.
 
-静的HTMLではiframeに任意の`Authorization`ヘッダーを付けられません。Kasanelyは`https://user:pass@example.com/`形式のURLを生成して読み込みます。
+You can also serve the folder locally:
 
-対象サイトやブラウザがuserinfo付きURLを拒否する場合や、`X-Frame-Options` / `Content-Security-Policy` によってiframe表示が禁止されている場合は、ブラウザ側だけでは表示できません。その場合はサーバー側プロキシが必要です。
+```bash
+python -m http.server 4173
+```
 
-## SEO / LLMO対応
+Then open:
 
-- `index.html` にタイトル、description、robots、OGP、Twitter Card、SoftwareApplication/WebApplicationのJSON-LDを追加しています。
-- `static/robots.txt` で通常クローラとOpenAI系クローラのクロール許可を明示しています。
-- `static/llms.txt` にAIエージェント向けの概要、主要機能、制限事項、主要ファイルを整理しています。
-- 公開URLが決まったら、canonical、`og:url`、サイトマップURLを追加してください。
-- 名前は一般Webの完全一致検索で明確な衝突が見当たりにくい造語として `Kasanely` を仮採用しています。商標、ドメイン、npm/GitHub等の正式な空き確認は公開前に別途行ってください。
+```text
+http://127.0.0.1:4173/index.html
+```
 
-## ファイル構成
+## Local HTML Files
 
-- `index.html`: 画面構造とSEO/LLMOメタデータ
-- `static/styles.css`: スタイル
-- `static/app.js`: URL生成、表示切り替え、位置調整
-- `static/robots.txt`: クローラ制御
-- `static/llms.txt`: LLM向け概要
+Local HTML files are loaded through the browser's file picker and displayed as temporary `blob:` URLs.
+
+This avoids requiring a local server for simple static HTML checks. The selected file is not uploaded anywhere and is only used inside your current browser session.
+
+Notes:
+
+- Linked assets inside the selected HTML may not load if their paths depend on a specific server or folder structure.
+- Browser security rules still apply.
+- If your page depends on API calls, routing, modules, or local assets, serving the folder with a local server is usually more reliable.
+
+## Basic Authentication
+
+Because Kasanely is a static browser-only tool, it cannot attach arbitrary `Authorization` headers to iframe requests.
+
+When Basic authentication is enabled, Kasanely creates a URL in this form:
+
+```text
+https://user:pass@example.com/
+```
+
+Some browsers or target sites may reject userinfo URLs. Credentials are not stored by Kasanely, but they are included in the iframe URL while the page is loaded, so use this only in a trusted environment.
+
+## iframe Limitations
+
+Some sites cannot be displayed in Kasanely because they block iframe embedding with headers such as:
+
+- `X-Frame-Options`
+- `Content-Security-Policy: frame-ancestors`
+
+Those restrictions are enforced by the browser. A static HTML tool cannot bypass them. For those cases, a server-side proxy or a different testing setup is required.
+
+## Repository Structure
+
+```text
+.
+├── index.html
+├── static/
+│   ├── app.js
+│   ├── styles.css
+│   ├── llms.txt
+│   └── robots.txt
+└── README.md
+```
+
+## License
+
+Add your preferred license before wider redistribution.

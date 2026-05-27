@@ -80,11 +80,35 @@ a {
 
 .top-links {
   display: flex;
+  align-items: center;
+  flex-wrap: wrap;
   justify-content: flex-end;
-  gap: 18px;
+  gap: 12px 18px;
   margin-bottom: 18px;
   font-size: 0.82rem;
   font-weight: 700;
+}
+
+.language-switch {
+  display: inline-grid;
+  grid-template-columns: repeat(2, auto);
+  overflow: hidden;
+  border: 1px solid var(--shade-3);
+  background: var(--shade-2);
+}
+
+.lang-button {
+  min-height: 32px;
+  padding: 0 10px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font-size: 0.76rem;
+}
+
+.lang-button[aria-pressed="true"] {
+  background: var(--selected-bg);
+  color: var(--selected-text);
 }
 
 h1,
@@ -94,9 +118,9 @@ p {
 }
 
 h1 {
-  margin-bottom: 10px;
+  margin-bottom: 18px;
   font-size: clamp(3.5rem, 12vw, 8rem);
-  line-height: 0.82;
+  line-height: 1;
   font-weight: 900;
 }
 
@@ -177,6 +201,14 @@ select {
   padding: 0 10px;
 }
 
+input[type="file"] {
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-size: 0.82rem;
+}
+
 input:focus-visible,
 select:focus-visible,
 button:focus-visible,
@@ -200,6 +232,31 @@ button:hover {
 
 button:active {
   transform: translateY(1px);
+}
+
+.secondary-button {
+  border-color: var(--shade-3);
+  background: var(--shade-1);
+  color: var(--accent-dark);
+}
+
+.local-file-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: end;
+}
+
+.file-picker {
+  min-width: 0;
+}
+
+.file-name {
+  min-height: 1.2em;
+  color: var(--muted);
+  font-size: 0.76rem;
+  line-height: 1.5;
+  word-break: break-all;
 }
 
 .check-row {
@@ -293,10 +350,6 @@ fieldset {
   background: var(--shade-2);
 }
 
-.toggle.three {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
 .toggle input {
   position: absolute;
   width: 1px;
@@ -327,7 +380,8 @@ fieldset {
 
 .comparison-layout {
   display: grid;
-  grid-template-columns: minmax(var(--viewport-width), max-content);
+  grid-template-areas: "shift-left stage shift-right";
+  grid-template-columns: 76px max-content 76px;
   justify-content: safe center;
   gap: 14px;
   align-items: start;
@@ -343,9 +397,8 @@ fieldset {
 }
 
 .shift-panel {
-  position: fixed;
-  bottom: 16px;
-  z-index: 30;
+  position: relative;
+  z-index: 18;
   display: grid;
   gap: 8px;
   align-items: center;
@@ -355,14 +408,30 @@ fieldset {
   border: 1px solid var(--shade-3);
   box-shadow: var(--shadow);
   backdrop-filter: blur(16px);
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
+}
+
+body.shift-panels-stuck .shift-panel {
+  position: fixed;
+  top: var(--shift-panel-sticky-top, 154px);
 }
 
 .shift-panel-left {
-  left: max(12px, calc((100vw - var(--workspace-width)) / 2 - 58px));
+  grid-area: shift-left;
 }
 
 .shift-panel-right {
-  right: max(12px, calc((100vw - var(--workspace-width)) / 2 - 58px));
+  grid-area: shift-right;
+}
+
+body.shift-panels-stuck .shift-panel-left {
+  left: var(--shift-panel-left-x, 16px);
+}
+
+body.shift-panels-stuck .shift-panel-right {
+  left: var(--shift-panel-right-x, calc(100vw - 92px));
 }
 
 .shift-button {
@@ -393,6 +462,7 @@ fieldset {
 }
 
 .stage {
+  grid-area: stage;
   position: relative;
   display: grid;
   grid-template-columns: repeat(2, var(--viewport-width));
@@ -475,13 +545,9 @@ iframe {
   pointer-events: none;
 }
 
-.stage[data-mode="overlay"][data-overlay="onion"] .right-card {
-  opacity: var(--right-opacity);
-}
-
 .stage[data-mode="overlay"][data-overlay="difference"] .right-card {
   mix-blend-mode: difference;
-  opacity: 0.82;
+  opacity: var(--right-opacity);
 }
 
 .stage[data-mode="overlay"][data-overlay="swipe"] .right-card {
@@ -577,22 +643,55 @@ iframe {
   }
 
   .comparison-layout {
+    grid-template-areas:
+      "shift-left shift-right"
+      "stage stage";
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    justify-content: stretch;
     width: auto;
     margin-inline: 16px;
   }
 
   .shift-panel {
-    bottom: 12px;
+    top: auto;
+    bottom: 14px;
     z-index: 16;
     grid-template-columns: auto auto auto;
+    width: 100%;
+    max-width: 160px;
+    margin-block: 8px;
+  }
+
+  body.shift-panels-stuck .shift-panel {
+    top: auto;
+    bottom: 14px;
+    width: min(160px, calc((100vw - 48px) / 2));
+  }
+
+  .shift-button {
+    width: 38px;
+    min-height: 38px;
+  }
+
+  .shift-input input {
+    width: 50px;
   }
 
   .shift-panel-left {
-    left: 12px;
+    justify-self: start;
   }
 
   .shift-panel-right {
+    justify-self: end;
+  }
+
+  body.shift-panels-stuck .shift-panel-left {
+    left: 12px;
+  }
+
+  body.shift-panels-stuck .shift-panel-right {
     right: 12px;
+    left: auto;
   }
 
   .stage {
